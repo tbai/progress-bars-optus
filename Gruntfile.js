@@ -22,7 +22,6 @@ module.exports = function (grunt) {
             options: {
                 sourceMap: true,
                 presets: ['es2015'],
-
             },
             dist: {
                 files: [{
@@ -39,13 +38,6 @@ module.exports = function (grunt) {
                 files: {
                     'dist/styles.css': 'scss/styles.scss'
                 }
-            }
-        },
-
-        uglify: {
-            build: {
-                src: 'src/index.js',
-                dest: 'build/index.js'
             }
         },
 
@@ -85,8 +77,7 @@ module.exports = function (grunt) {
 
     });
 
-    // Load the plugin that provides the "uglify" task.
-    grunt.loadNpmTasks('grunt-contrib-uglify');
+
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-watch');
@@ -95,5 +86,6 @@ module.exports = function (grunt) {
 
     // Default task(s).
     grunt.registerTask('dev', ['copy', 'babel', 'sass', 'connect', 'watch' ]);
+    grunt.registerTask('build', ['copy', 'babel', 'sass']);
 
 };
