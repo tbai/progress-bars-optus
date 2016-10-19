@@ -1,9 +1,10 @@
 
 class ProgressBar {
 
-  constructor (id){
+  constructor (id, initialValue = 0, limit = 100){
     this.id = id;
-    this.value = 50;
+    this.value = initialValue;
+    this.limit = limit;
   }
 
   buildElement(){
@@ -18,17 +19,23 @@ class ProgressBar {
 
     this.levelEl = this.el.querySelector(".level");
     this.textEl = this.el.querySelector(".text");
+
+    this.onChange();
+  }
+
+  convertValue(num){
+    return parseInt (100*num/this.limit, 10);
   }
 
   onChange(){
-    // calculate the size of the bar leve element
-    this.levelEl.style.width = "500px";
-    this.textEl.innerText = `${this.value} %`;
+    this.textEl.innerText = `${this.convertValue(this.value)} %`;
+    this.levelEl.style.width = `${this.convertValue(this.value)}%`;
   }
+
 
   setValue(num){
     // validate the number type and range
-    if (typeof num === "number" && num >= 0 && num <=100){
+    if (typeof num === "number" && num >= 0 && num <=this.limit){
       this.value = num;
       this.onChange();
     }
@@ -36,8 +43,8 @@ class ProgressBar {
 
   incValueBy(num){
     let newValue = this.value + num;
-    if (newValue > 100){
-      newValue = 100
+    if (newValue > this.limit){
+      newValue = this.limit
     } else if (newValue <0){
       newValue = 0;
     }
@@ -57,40 +64,65 @@ class ProgressBar {
 }
 
 
-// Render progress bars
-const barsContainerEl = document.querySelector(".progress-bars-container");
+// Build the HTML
 
-// append 3 progress bar elements
-const progressBars = [];
-for (let i=0, bar; i<3; i++){
-  bar = new ProgressBar(`progress${i+1}`);
-  bar.render(barsContainerEl);
-  progressBars[bar.id] = bar;
-}
+let data = null;
+let progressBars = [];
 
-// Render action buttons
-const actionContainerEl = document.querySelector(".actions");
-
-// render select options
-const selectEl = document.querySelector("select");
-Object.keys(progressBars).forEach(barId => {
-  let bar = progressBars[barId];
-  let optionEl = document.createElement("option");
-  optionEl.setAttribute("value", bar.id);
-  optionEl.innerText = bar.id;
-  selectEl.appendChild(optionEl);
+fetch('https://pb-api.herokuapp.com/bars')
+.then(function(response) {
+  return response.json().then( json => {
+    data = json;
+    setupBars();
+    setupActionButtons();
+  });
 });
 
-function getSelectedBar (){
-  return progressBars[selectEl.value];
+
+function setupBars(){
+  // Render progress bars
+  const barsContainerEl = document.querySelector(".progress-bars-container");
+
+  data.bars.forEach((initialVal, i) => {
+    let bar = new ProgressBar(`progress${i+1}`, initialVal, data.limit);
+    bar.render(barsContainerEl);
+    progressBars[bar.id] = bar;
+  });
+
 }
 
-actionContainerEl.addEventListener("click", event => {
-  let target = event.target;
-  if (event.target instanceof HTMLButtonElement){
-    getSelectedBar().incValueBy(parseInt(target.value, 10));
-  }
-});
+function setupActionButtons(){
+  // Render action buttons
+  const actionContainerEl = document.querySelector(".actions");
+
+  // render select options
+  const selectEl = document.querySelector("select");
+  Object.keys(progressBars).forEach(barId => {
+    let bar = progressBars[barId];
+    let optionEl = document.createElement("option");
+    optionEl.setAttribute("value", bar.id);
+    optionEl.innerText = bar.id;
+    selectEl.appendChild(optionEl);
+  });
+
+  data.buttons.forEach(num => {
+    let btn = document.createElement('button');
+    btn.setAttribute("value", num);
+    btn.innerText = num;
+    actionContainerEl.appendChild(btn);
+  });
+
+  actionContainerEl.addEventListener("click", event => {
+    let target = event.target;
+    if (event.target instanceof HTMLButtonElement){
+      progressBars[selectEl.value].incValueBy(parseInt(target.value, 10));
+    }
+  });
+}
+
+
+
+
 
 
 

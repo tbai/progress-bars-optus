@@ -1,3 +1,58 @@
+
+$progressBarHeight: 60px;
+$progressBarBackgroundColor: #afd8e5;
+$progressBarBorderColor: #333;
+
+button,select {
+  padding: 1em 1.2em;
+}
+
 body {
-    background: red;
+  margin: 1em;
+}
+
+
+// @media screen and (max-width:500px) {
+//   html {
+//     font-size: 90%;
+//     $progressBarHeight: 40px;
+//   }
+
+//   button,select {
+//     padding: .8em 1.5em;
+//   }
+//   .progress-bar {
+//     height:
+//   }
+
+// }
+
+
+.progress-bar-container {
+  margin: 2em auto;
+  border: solid black 1px;
+}
+
+.progress-bar {
+  width: 100%;
+  border: solid #ccc 1px;
+  height: $progressBarHeight;
+  position: relative;
+
+  margin-bottom: 1em;
+
+  .text {
+    width: 100%;
+    position: absolute;
+    top:0;
+    text-align: center;
+    line-height: $progressBarHeight;
+  }
+
+  .level {
+    background: $progressBarBackgroundColor;
+    height: $progressBarHeight;
+    top: 1px;
+    transition: width 1s ease-out;
+  }
 }
