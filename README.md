@@ -1,7 +1,9 @@
 # progress-bars-optus
 
 Simple page showing multiple prograss bars for a code challenge from Optus.
-Assignment description `https://github.com/tbai/progress-bars-optus/tree/master`
+
+Result available at: https://tbai.github.io/progress-bars-optus/
+
 
 ## Installation
 
