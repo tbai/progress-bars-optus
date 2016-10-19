@@ -7,7 +7,6 @@ Result available at: https://tbai.github.io/progress-bars-optus/
 
 ## Installation
 
-npm install -g grunt-cli
 npm install
 
 ## Usage
