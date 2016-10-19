@@ -1,5 +1,67 @@
 
-import ProgressBar from 'progress-bar';
+class ProgressBar {
+
+  constructor (id, initialValue = 0, limit = 100){
+    this.id = id;
+    this.value = initialValue;
+    this.limit = limit;
+  }
+
+  buildElement(){
+    this.el = document.createElement("div");
+    this.el.id = this.id;
+    this.el.classList.add("progress-bar");
+    this.el.innerHTML =`
+      <div class="bar"></div>
+      <div class="level"></div>
+      <div class="text">${this.value} %</div>
+    `;
+
+    this.levelEl = this.el.querySelector(".level");
+    this.textEl = this.el.querySelector(".text");
+
+    this.onChange();
+  }
+
+  convertValue(num){
+    return parseInt (100*num/this.limit, 10);
+  }
+
+  onChange(){
+    this.textEl.innerText = `${this.convertValue(this.value)} %`;
+    this.levelEl.style.width = `${this.convertValue(this.value)}%`;
+  }
+
+
+  setValue(num){
+    // validate the number type and range
+    if (typeof num === "number" && num >= 0 && num <=this.limit){
+      this.value = num;
+      this.onChange();
+    }
+  }
+
+  incValueBy(num){
+    let newValue = this.value + num;
+    if (newValue > this.limit){
+      newValue = this.limit
+    } else if (newValue <0){
+      newValue = 0;
+    }
+    this.setValue(newValue);
+  }
+
+  render (containerEl){
+
+    if (!containerEl)
+      throw new Error("Container element not found: " + containerSelector);
+
+    this.buildElement();
+    containerEl.appendChild(this.el);
+  }
+
+
+}
 
 
 
