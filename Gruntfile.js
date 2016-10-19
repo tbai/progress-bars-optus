@@ -21,12 +21,16 @@ module.exports = function (grunt) {
         babel: {
             options: {
                 sourceMap: true,
-                presets: ['es2015']
+                presets: ['es2015'],
+
             },
             dist: {
-                files: {
-                    'dist/index.js': 'src/index.js'
-                }
+                files: [{
+                  expand: true,
+                  cwd: 'src/',
+                  src: ['*.js'],
+                  dest: 'dist/'
+                }]
             }
         },
 
@@ -51,34 +55,30 @@ module.exports = function (grunt) {
                     port: 3000,
                     hostname: '*',
                     base: "dist",
-                    keepalive: true
+                    // keepalive: true
                 }
             }
         },
 
         watch: {
+          options: {
+            livereload: true,
+            spawn: false
+          },
+
           js: {
             files: ['src/*.js'],
-            tasks: ['babel'],
-            options: {
-              spawn: false,
-            },
+            tasks: ['babel']
           },
 
           scss: {
             files: ['scss/*.scss'],
-            tasks: ['sass'],
-            options: {
-              spawn: false,
-            },
+            tasks: ['sass']
           },
 
           html: {
             files: ['index.html'],
-            tasks: ['copy'],
-            options: {
-              spawn: false,
-            },
+            tasks: ['copy']
           },
         }
 
@@ -94,6 +94,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-babel');
 
     // Default task(s).
-    grunt.registerTask('dev', ['copy', 'babel', 'sass', 'connect', 'watch']);
+    grunt.registerTask('dev', ['copy', 'babel', 'sass', 'connect', 'watch' ]);
 
 };
