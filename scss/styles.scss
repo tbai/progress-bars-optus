@@ -18,6 +18,9 @@ body {
 
 .progress-bar {
   width: 100%;
+  @media screen and (min-width: 620px){
+    width: 600px;
+  }
   border: solid #ccc 1px;
   height: $progressBarHeight;
   position: relative;
@@ -37,5 +40,11 @@ body {
     height: $progressBarHeight;
     top: 1px;
     transition: width 1s ease-out;
+  }
+}
+
+@media screen and (max-width: 400px){
+  h1 {
+    font-size: 1.5em;
   }
 }
